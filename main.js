@@ -2,18 +2,18 @@
 // npm install ejs
 const express = require('express')
 const app = express()
-var http = require('http');
+var http = require('http')
 const path = require('path')
 const fs = require('fs')
 // npm i body-parser
-var bodyParser = require('body-parser');
+var bodyParser = require('body-parser')
 // npm install axios
 const axios = require('axios')
 // npm i json-2-csv
 const converter = require('json-2-csv')
 // npm i json2xls
-const json2xls = require('json2xls');
-app.locals.data = {};
+const json2xls = require('json2xls')
+app.locals.data = {}
 app.use(express.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, "public")))
 
@@ -30,7 +30,10 @@ app.post('/add', (req, res) => {
     var dd = d.getDate()
     var mm = d.getMonth() + 1
     var yyyy = d.getFullYear()
-    var hoy = yyyy + ' ' + mm + ' ' + dd
+    var hrs = d.getHours()
+    var min = d.getMinutes()
+    var seg = d.getSeconds()
+    var hoy = yyyy + ' ' + mm + ' ' + dd + ' ' + hrs + min + seg
     axios({
         method: 'get',
         url: 'https://api.mercadolibre.com/sites/MLA/search?q=' + encodeURIComponent(req.body.articulo),
@@ -45,12 +48,12 @@ app.post('/add', (req, res) => {
                 var str_titulo = element.title
                 str_titulo = str_titulo.replace(/,/g, '')
                 resultados_json.push({
-                    "id": element.id,
-                    "titulo": str_titulo,
-                    "precio": element.price,
-                    "link": element.permalink,
-                    "imagen": element.thumbnail,
-                    "vendedor": element.seller.permalink
+                    "Id": element.id,
+                    "Articulo": str_titulo,
+                    "Precio": element.price,
+                    "Link": element.permalink,
+                    "Imagen": element.thumbnail,
+                    "Vendedor": element.seller.permalink
 
                 })
             })
@@ -59,27 +62,27 @@ app.post('/add', (req, res) => {
             console.log(resultados_json)
             try { fs.writeFileSync('./resultados/' + req.body.articulo + '_' + hoy + '.json', data, 'utf-8') }
             catch (e) { console.log('Failed to save the JSON file !') }
-            const json_csv = JSON.parse(fs.readFileSync('./resultados/' + req.body.articulo + '_' + hoy + '.json'))
-            converter.json2csv(json_csv, (err, csv) => {
-                if (err) {
-                    console.log(err)
-                }
+            // const json_csv = JSON.parse(fs.readFileSync('./resultados/' + req.body.articulo + '_' + hoy + '.json'))
+            // converter.json2csv(json_csv, (err, csv) => {
+            //     if (err) {
+            //         console.log(err)
+            //     }
 
-                fs.writeFileSync('./resultados/' + req.body.articulo + '_' + hoy + '.csv', csv)
-            })
-            var xls = json2xls(JSON.parse(fs.readFileSync('./resultados/' + req.body.articulo + '_' + hoy + '.json')))
+            //     fs.writeFileSync('./resultados/' + req.body.articulo + '_' + hoy + '.csv', csv)
+            // })
+            var xls = json2xls(JSON.parse(data))
             fs.writeFileSync('./resultados/' + req.body.articulo + '_' + hoy + '.xlsx', xls, 'binary')
-            req.app.locals.data = req.body.articulo + '_' + hoy + '.xlsx';
-            console.log("global:" + req.app.locals.data);
+            req.app.locals.data = req.body.articulo + '_' + hoy + '.xlsx'
+            console.log("global:" + req.app.locals.data)
             // try { fs.writeFileSync('myfile.csv', data, 'utf-8'); }
             // catch (e) { alert('Failed to save the CSV file !'); }
             res.render("descargar",)
         })
-});
+})
 
 app.get('/download', function (req, res) {
-    res.download("./resultados/" + req.app.locals.data);
-});
+    res.download("./resultados/" + req.app.locals.data)
+})
 
 app.get('/about', (req, res) => {
     res.send("daft y punk")

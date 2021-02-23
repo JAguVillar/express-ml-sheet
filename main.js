@@ -60,7 +60,7 @@ app.post('/add', (req, res) => {
             const data = JSON.stringify(resultados_json)
             // app.use(json2xls.middleware)
             console.log(resultados_json)
-            try { fs.writeFileSync('./resultados/' + req.body.articulo + '_' + hoy + '.json', data, 'utf-8') }
+            try { fs.writeFileSync('./public/resultados' + req.body.articulo + '_' + hoy + '.json', data, 'utf-8') }
             catch (e) { console.log('Failed to save the JSON file !') }
             // const json_csv = JSON.parse(fs.readFileSync('./resultados/' + req.body.articulo + '_' + hoy + '.json'))
             // converter.json2csv(json_csv, (err, csv) => {
@@ -71,7 +71,7 @@ app.post('/add', (req, res) => {
             //     fs.writeFileSync('./resultados/' + req.body.articulo + '_' + hoy + '.csv', csv)
             // })
             var xls = json2xls(JSON.parse(data))
-            fs.writeFileSync('./resultados/' + req.body.articulo + '_' + hoy + '.xlsx', xls, 'binary')
+            fs.writeFileSync('./public/resultados/' + req.body.articulo + '_' + hoy + '.xlsx', xls, 'binary')
             req.app.locals.data = req.body.articulo + '_' + hoy + '.xlsx'
             console.log("global:" + req.app.locals.data)
             // try { fs.writeFileSync('myfile.csv', data, 'utf-8'); }

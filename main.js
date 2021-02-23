@@ -42,8 +42,12 @@ app.post('/add', (req, res) => {
         .then(function (response) {
             var resultados = []
             var resultados_json = []
-            // resultados = response.data.results
-            console.log(resultados)
+            resultados = response.data.results
+            // console.log(resultados)
+            // var crudo = JSON.stringify(resultados)
+            // // app.use(json2xls.middleware)
+            // try { fs.writeFileSync('./public/resultados/' + 'json_crudo', crudo, 'utf-8') }
+            // catch (e) { console.log('Failed to save the JSON file !') }
             response.data.results.forEach(element => {
                 var str_titulo = element.title
                 str_titulo = str_titulo.replace(/,/g, '')

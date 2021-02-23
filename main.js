@@ -81,7 +81,7 @@ app.post('/add', (req, res) => {
 })
 
 app.get('/download', function (req, res) {
-    res.download("./resultados/" + req.app.locals.data)
+    res.download("./public/resultados/" + req.app.locals.data)
 })
 
 app.get('/about', (req, res) => {

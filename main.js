@@ -60,7 +60,7 @@ app.post('/add', (req, res) => {
             const data = JSON.stringify(resultados_json)
             // app.use(json2xls.middleware)
             console.log(resultados_json)
-            try { fs.writeFileSync('./public/resultados' + req.body.articulo + '_' + hoy + '.json', data, 'utf-8') }
+            try { fs.writeFileSync('./public/resultados/' + req.body.articulo + '_' + hoy + '.json', data, 'utf-8') }
             catch (e) { console.log('Failed to save the JSON file !') }
             // const json_csv = JSON.parse(fs.readFileSync('./resultados/' + req.body.articulo + '_' + hoy + '.json'))
             // converter.json2csv(json_csv, (err, csv) => {
